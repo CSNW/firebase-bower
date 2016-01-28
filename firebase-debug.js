@@ -3908,7 +3908,7 @@ goog.Promise.Resolver_ = function(promise, resolve, reject) {
   this.reject = reject;
 };
 goog.provide("fb.constants");
-var NODE_CLIENT = false;
+var NODE_CLIENT = true;
 fb.constants.NODE_CLIENT = NODE_CLIENT;
 var CLIENT_VERSION_DEFINE = "0.0.0";
 var CLIENT_VERSION = CLIENT_VERSION || CLIENT_VERSION_DEFINE;
@@ -5300,9 +5300,9 @@ fb.core.util.parseRepoInfo = function(dataURL) {
   if (parsedUrl.domain === "firebase") {
     fb.core.util.fatal(parsedUrl.host + " is no longer supported. " + "Please use <YOUR FIREBASE>.firebaseio.com instead");
   }
-  if (!namespace || namespace == "undefined") {
-    fb.core.util.fatal("Cannot parse Firebase url. " + "Please use https://<YOUR FIREBASE>.firebaseio.com");
-  }
+  // if (!namespace || namespace == "undefined") {
+  //   fb.core.util.fatal("Cannot parse Firebase url. " + "Please use https://<YOUR FIREBASE>.firebaseio.com");
+  // }
   if (!parsedUrl.secure) {
     fb.core.util.warnIfPageIsSecure();
   }
