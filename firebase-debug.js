@@ -3150,7 +3150,7 @@ goog.crypt.base64.init_ = function() {
   }
 };
 goog.provide("fb.constants");
-var NODE_CLIENT = false;
+var NODE_CLIENT = true;
 var CLIENT_VERSION_DEFINE = "0.0.0";
 var CLIENT_VERSION = CLIENT_VERSION || CLIENT_VERSION_DEFINE;
 goog.provide("fb.util.obj");
@@ -4421,7 +4421,7 @@ fb.core.util.parseURL = function(dataURL) {
     host = dataURL.substring(0, slashInd);
     pathString = fb.core.util.decodePath(dataURL.substring(slashInd));
     var parts = host.split(".");
-    if (parts.length === 3) {
+    if (parts.length >= 3) {
       domain = parts[1];
       subdomain = parts[0].toLowerCase();
     } else {
