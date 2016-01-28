@@ -1,0 +1,10 @@
+{
+  "name": "firebase",
+  "description": "a fork of the non-minified firebase client to allow connecting to non-firebaseio.com servers for testing",
+  "private": true,
+  "main": "firebase-debug.js",
+  "dependencies": {
+    "faye-websocket": "0.10.0"
+  },
+  "version": "2.3.2-allow-other-servers"
+}
