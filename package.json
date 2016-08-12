@@ -1,6 +1,6 @@
 {
   "name": "firebase",
-  "version": "2.3.3",
+  "version": "2.3.4-sinon-exception-guard",
   "description": "a fork of the non-minified firebase client to allow connecting to non-firebaseio.com servers for testing",
   "private": true,
   "main": "firebase-debug.js",
