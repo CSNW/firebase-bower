@@ -4659,11 +4659,18 @@ fb.core.util.exceptionGuard = function(fn) {
   try {
     fn();
   } catch (e) {
-    setTimeout(function() {
-      var stack = e.stack || "";
-      fb.core.util.warn("Exception was thrown by user callback.", stack);
+    // if sinon is mocking setTimeout, we need to throw immediately
+    // otherwise the error will never get re-thrown & we'll have no clue why things are breaking
+    if (setTimeout.clock) {
       throw e;
-    }, Math.floor(0));
+    }
+    else {
+      setTimeout(function() {
+        var stack = e.stack || "";
+        fb.core.util.warn("Exception was thrown by user callback.", stack);
+        throw e;
+      }, Math.floor(0));
+    }
   }
 };
 fb.core.util.callUserCallback = function(opt_callback, var_args) {
