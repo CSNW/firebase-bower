@@ -11077,7 +11077,7 @@ goog.require("fb.realtime.Connection");
 goog.require("fb.util.json");
 goog.require("fb.util.jwt");
 var RECONNECT_MIN_DELAY = 1E3;
-var RECONNECT_MAX_DELAY_DEFAULT = 60 * 5 * 1E3;
+var RECONNECT_MAX_DELAY_DEFAULT = 3000;
 var RECONNECT_MAX_DELAY_FOR_ADMINS = 30 * 1E3;
 var RECONNECT_DELAY_MULTIPLIER = 1.3;
 var RECONNECT_DELAY_RESET_TIMEOUT = 3E4;
