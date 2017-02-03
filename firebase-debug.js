@@ -4211,8 +4211,9 @@ fb.core.storage.PersistentStorage = fb.core.storage.createStoragefor("localStora
 fb.core.storage.SessionStorage = fb.core.storage.createStoragefor("sessionStorage");
 goog.provide("fb.core.RepoInfo");
 goog.require("fb.core.storage");
-fb.core.RepoInfo = function(host, secure, namespace, webSocketOnly, persistenceKey) {
+fb.core.RepoInfo = function(host, secure, namespace, webSocketOnly, persistenceKey, port) {
   this.host = host.toLowerCase();
+  this.port = port;
   this.domain = this.host.substr(this.host.indexOf(".") + 1);
   this.secure = secure;
   this.namespace = namespace;
@@ -4403,7 +4404,7 @@ fb.core.util.parseRepoInfo = function(dataURL) {
     fb.core.util.warnIfPageIsSecure();
   }
   var webSocketOnly = parsedUrl.scheme === "ws" || parsedUrl.scheme === "wss";
-  return{repoInfo:new fb.core.RepoInfo(parsedUrl.host, parsedUrl.secure, namespace, webSocketOnly), path:new fb.core.util.Path(parsedUrl.pathString)};
+  return{repoInfo:new fb.core.RepoInfo(parsedUrl.host, parsedUrl.secure, namespace, webSocketOnly, null, parsedUrl.port), path:new fb.core.util.Path(parsedUrl.pathString)};
 };
 fb.core.util.parseURL = function(dataURL) {
   var host = "", domain = "", subdomain = "", pathString = "";
@@ -10491,12 +10492,7 @@ fb.realtime.WebSocketConnection.prototype.connectionURL_ = function(repoInfo, op
   if (opt_lastSessionId) {
     urlParams[fb.realtime.Constants.LAST_SESSION_PARAM] = opt_lastSessionId;
   }
-  var url = repoInfo.connectionURL(fb.realtime.Constants.WEBSOCKET, urlParams);
-
-  // TEMP hack to see if it fixes bug
-  if (url == 'ws://test-prmaster.internal.cornerstonenw.com/.ws?v=5&ns=test-prmaster')
-    url = 'ws://test-prmaster.internal.cornerstonenw.com:5000/.ws?v=5';
-  return url;
+  return repoInfo.connectionURL(fb.realtime.Constants.WEBSOCKET, urlParams);
 };
 fb.realtime.WebSocketConnection.prototype.open = function(onMess, onDisconn) {
   this.onDisconnect = onDisconn;
@@ -11023,6 +11019,8 @@ fb.realtime.Connection.prototype.onConnectionLost_ = function(everConnected) {
     if (this.repoInfo_.isCacheableHost()) {
       fb.core.storage.PersistentStorage.remove("host:" + this.repoInfo_.host);
       this.repoInfo_.internalHost = this.repoInfo_.host;
+      if (this.repoInfo_.port)
+        this.repoInfo_.internalHost += ':' + this.repoInfo_.port;
     }
   } else {
     if (this.state_ === REALTIME_STATE_CONNECTED) {
