@@ -10476,7 +10476,7 @@ fb.realtime.WebSocketConnection = function(connId, repoInfo, opt_transportSessio
   this.bytesSent = 0;
   this.bytesReceived = 0;
   this.stats_ = fb.core.stats.StatsManager.getCollection(repoInfo);
-  console.log('WebSocketConnection calling connectionURL_()');
+  console.log('WebSocketConnection calling connectionURL_() stack: ' + new Error().stack);
   this.connURL = this.connectionURL_(repoInfo, opt_transportSessionId, opt_lastSessionId);
 };
 fb.realtime.WebSocketConnection.prototype.connectionURL_ = function(repoInfo, opt_transportSessionId, opt_lastSessionId) {
@@ -10492,7 +10492,7 @@ fb.realtime.WebSocketConnection.prototype.connectionURL_ = function(repoInfo, op
     urlParams[fb.realtime.Constants.LAST_SESSION_PARAM] = opt_lastSessionId;
   }
   var url = repoInfo.connectionURL(fb.realtime.Constants.WEBSOCKET, urlParams);
-  
+
   // TEMP hack to see if it fixes bug
   if (url == 'ws://test-prmaster.internal.cornerstonenw.com/.ws?v=5&ns=test-prmaster')
     url = 'ws://test-prmaster.internal.cornerstonenw.com:5000/.ws?v=5';

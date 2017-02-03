@@ -1,6 +1,6 @@
 {
   "name": "firebase",
-  "version": "2.3.5-bug-diag-workaround",
+  "version": "2.3.5-bug-diag-workaround-stack",
   "description": "a fork of the non-minified firebase client to allow connecting to non-firebaseio.com servers for testing",
   "private": true,
   "main": "firebase-debug.js",
