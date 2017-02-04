@@ -4212,6 +4212,7 @@ fb.core.storage.SessionStorage = fb.core.storage.createStoragefor("sessionStorag
 goog.provide("fb.core.RepoInfo");
 goog.require("fb.core.storage");
 fb.core.RepoInfo = function(host, secure, namespace, webSocketOnly, persistenceKey, port) {
+  console.log('PAR: RepoInfo called w/ port ' + port + ': ' + new Error().stack);
   this.host = host.toLowerCase();
   this.port = port;
   this.domain = this.host.substr(this.host.indexOf(".") + 1);
@@ -9392,6 +9393,7 @@ fb.login.transports.NodeHttp.prototype.open = function(url, params, cb) {
   var self = this, parsedUrl = fb.core.util.parseURL(url), http = parsedUrl.scheme === "http" ? require("http") : require("https"), method = this.options["method"], payload;
   var headers = {"Accept":"application/json;text/plain"};
   goog.object.extend(headers, this.options["headers"]);
+  console.log('PAR: NodeHttp.open w/ parsedUrl.port: ' + parsedUrl.port + ': ' + new Error().stack);
   var requestOpts = {"host":parsedUrl.host.split(":")[0], "port":parsedUrl.port, "path":parsedUrl.pathString, "method":this.options["method"].toUpperCase()};
   if (method === "GET") {
     requestOpts["path"] += (/\?/.test(requestOpts["path"]) ? "" : "?") + fb.util.querystring(params);
@@ -10492,6 +10494,7 @@ fb.realtime.WebSocketConnection.prototype.connectionURL_ = function(repoInfo, op
   if (opt_lastSessionId) {
     urlParams[fb.realtime.Constants.LAST_SESSION_PARAM] = opt_lastSessionId;
   }
+  console.log('PAR: connectionURL_() called w/ generated URL: ' + repoInfo.connectionURL(fb.realtime.Constants.WEBSOCKET, urlParams) + ': ' + new Error().stack);
   return repoInfo.connectionURL(fb.realtime.Constants.WEBSOCKET, urlParams);
 };
 fb.realtime.WebSocketConnection.prototype.open = function(onMess, onDisconn) {
@@ -11019,6 +11022,7 @@ fb.realtime.Connection.prototype.onConnectionLost_ = function(everConnected) {
     if (this.repoInfo_.isCacheableHost()) {
       fb.core.storage.PersistentStorage.remove("host:" + this.repoInfo_.host);
       this.repoInfo_.internalHost = this.repoInfo_.host;
+      console.log('PAR: onConnectionLost_ repoInfo_.port: ' + this.repoInfo_.port + ': ' + new Error().stack);
       if (this.repoInfo_.port)
         this.repoInfo_.internalHost += ':' + this.repoInfo_.port;
     }
