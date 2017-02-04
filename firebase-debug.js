@@ -4248,10 +4248,10 @@ fb.core.RepoInfo.prototype.connectionURL = function(type, params) {
   fb.core.util.assert(typeof params === "object", "typeof params must == object");
   var connURL;
   if (type === fb.realtime.Constants.WEBSOCKET) {
-    connURL = (this.secure ? "wss://" : "ws://") + this.internalHost + "/.ws?";
+    connURL = (this.secure ? "wss://" : "ws://") + this.internalHost + (this.port ? ':' + this.port : '') + "/.ws?";
   } else {
     if (type === fb.realtime.Constants.LONG_POLLING) {
-      connURL = (this.secure ? "https://" : "http://") + this.internalHost + "/.lp?";
+      connURL = (this.secure ? "https://" : "http://") + this.internalHost + (this.port ? ':' + this.port : '') + "/.lp?";
     } else {
       throw new Error("Unknown connection type: " + type);
     }
