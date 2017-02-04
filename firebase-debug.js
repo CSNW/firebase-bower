@@ -4212,7 +4212,6 @@ fb.core.storage.SessionStorage = fb.core.storage.createStoragefor("sessionStorag
 goog.provide("fb.core.RepoInfo");
 goog.require("fb.core.storage");
 fb.core.RepoInfo = function(host, secure, namespace, webSocketOnly, persistenceKey, port) {
-  console.log('PAR: RepoInfo called w/ port ' + port + ': ' + new Error().stack);
   this.host = host.toLowerCase();
   this.port = port;
   this.domain = this.host.substr(this.host.indexOf(".") + 1);
@@ -4236,7 +4235,6 @@ fb.core.RepoInfo.prototype.isCustomHost = function() {
 };
 fb.core.RepoInfo.prototype.updateHost = function(newHost) {
   if (newHost !== this.internalHost) {
-    console.log('updateHost() called; old: ' + this.internalHost + ', new: ' + newHost + ': ' + new Error().stack);
     this.internalHost = newHost;
     if (this.isCacheableHost()) {
       fb.core.storage.PersistentStorage.set("host:" + this.host, this.internalHost);
@@ -9394,7 +9392,6 @@ fb.login.transports.NodeHttp.prototype.open = function(url, params, cb) {
   var self = this, parsedUrl = fb.core.util.parseURL(url), http = parsedUrl.scheme === "http" ? require("http") : require("https"), method = this.options["method"], payload;
   var headers = {"Accept":"application/json;text/plain"};
   goog.object.extend(headers, this.options["headers"]);
-  console.log('PAR: NodeHttp.open w/ parsedUrl.port: ' + parsedUrl.port + ': ' + new Error().stack);
   var requestOpts = {"host":parsedUrl.host.split(":")[0], "port":parsedUrl.port, "path":parsedUrl.pathString, "method":this.options["method"].toUpperCase()};
   if (method === "GET") {
     requestOpts["path"] += (/\?/.test(requestOpts["path"]) ? "" : "?") + fb.util.querystring(params);
@@ -10480,7 +10477,6 @@ fb.realtime.WebSocketConnection = function(connId, repoInfo, opt_transportSessio
   this.bytesSent = 0;
   this.bytesReceived = 0;
   this.stats_ = fb.core.stats.StatsManager.getCollection(repoInfo);
-  console.log('WebSocketConnection calling connectionURL_() stack: ' + new Error().stack);
   this.connURL = this.connectionURL_(repoInfo, opt_transportSessionId, opt_lastSessionId);
 };
 fb.realtime.WebSocketConnection.prototype.connectionURL_ = function(repoInfo, opt_transportSessionId, opt_lastSessionId) {
@@ -10495,7 +10491,6 @@ fb.realtime.WebSocketConnection.prototype.connectionURL_ = function(repoInfo, op
   if (opt_lastSessionId) {
     urlParams[fb.realtime.Constants.LAST_SESSION_PARAM] = opt_lastSessionId;
   }
-  console.log('PAR: connectionURL_() called w/ generated URL: ' + repoInfo.connectionURL(fb.realtime.Constants.WEBSOCKET, urlParams) + ': ' + new Error().stack);
   return repoInfo.connectionURL(fb.realtime.Constants.WEBSOCKET, urlParams);
 };
 fb.realtime.WebSocketConnection.prototype.open = function(onMess, onDisconn) {
@@ -11023,9 +11018,6 @@ fb.realtime.Connection.prototype.onConnectionLost_ = function(everConnected) {
     if (this.repoInfo_.isCacheableHost()) {
       fb.core.storage.PersistentStorage.remove("host:" + this.repoInfo_.host);
       this.repoInfo_.internalHost = this.repoInfo_.host;
-      console.log('PAR: onConnectionLost_ repoInfo_.port: ' + this.repoInfo_.port + ': ' + new Error().stack);
-      if (this.repoInfo_.port)
-        this.repoInfo_.internalHost += ':' + this.repoInfo_.port;
     }
   } else {
     if (this.state_ === REALTIME_STATE_CONNECTED) {
@@ -11106,7 +11098,6 @@ fb.core.PersistentConnection = goog.defineClass(null, {constructor:function(repo
   this.onConnectStatus_ = onConnectStatus;
   this.onServerInfoUpdate_ = onServerInfoUpdate;
   this.repoInfo_ = repoInfo;
-  console.log('PC ctor repoInfo: ' + JSON.stringify(this.repoInfo_));
   this.securityDebugCallback_ = null;
   this.lastSessionId = null;
   this.realtime_ = null;
@@ -11377,7 +11368,6 @@ fb.core.PersistentConnection = goog.defineClass(null, {constructor:function(repo
     clearTimeout(this.establishConnectionTimer_);
   }
   var self = this;
-  console.log('scheduleConnect called, repoInfo_: ' + JSON.stringify(this.repoInfo_) + ': ' + new Error().stack);
   this.establishConnectionTimer_ = setTimeout(function() {
     self.establishConnectionTimer_ = null;
     self.establishConnection_();
@@ -11706,7 +11696,6 @@ goog.require("fb.util.jwt");
 goog.require("goog.string");
 fb.core.Repo = goog.defineClass(null, {constructor:function(repoInfo, forceRestClient) {
   this.repoInfo_ = repoInfo;
-  console.log('Repo ctor: ' + JSON.stringify(this.repoInfo_));
   this.stats_ = fb.core.stats.StatsManager.getCollection(repoInfo);
   this.statsListener_ = null;
   this.eventQueue_ = new fb.core.view.EventQueue;
