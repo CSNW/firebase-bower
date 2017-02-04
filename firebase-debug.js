@@ -4236,6 +4236,7 @@ fb.core.RepoInfo.prototype.isCustomHost = function() {
 };
 fb.core.RepoInfo.prototype.updateHost = function(newHost) {
   if (newHost !== this.internalHost) {
+    console.log('updateHost() called; old: ' + this.internalHost + ', new: ' + newHost + ': ' + new Error().stack);
     this.internalHost = newHost;
     if (this.isCacheableHost()) {
       fb.core.storage.PersistentStorage.set("host:" + this.host, this.internalHost);
@@ -11105,6 +11106,7 @@ fb.core.PersistentConnection = goog.defineClass(null, {constructor:function(repo
   this.onConnectStatus_ = onConnectStatus;
   this.onServerInfoUpdate_ = onServerInfoUpdate;
   this.repoInfo_ = repoInfo;
+  console.log('PC ctor repoInfo: ' + JSON.stringify(this.repoInfo_));
   this.securityDebugCallback_ = null;
   this.lastSessionId = null;
   this.realtime_ = null;
@@ -11375,6 +11377,7 @@ fb.core.PersistentConnection = goog.defineClass(null, {constructor:function(repo
     clearTimeout(this.establishConnectionTimer_);
   }
   var self = this;
+  console.log('scheduleConnect called, repoInfo_: ' + JSON.stringify(this.repoInfo_) + ': ' + new Error().stack);
   this.establishConnectionTimer_ = setTimeout(function() {
     self.establishConnectionTimer_ = null;
     self.establishConnection_();
@@ -11703,6 +11706,7 @@ goog.require("fb.util.jwt");
 goog.require("goog.string");
 fb.core.Repo = goog.defineClass(null, {constructor:function(repoInfo, forceRestClient) {
   this.repoInfo_ = repoInfo;
+  console.log('Repo ctor: ' + JSON.stringify(this.repoInfo_));
   this.stats_ = fb.core.stats.StatsManager.getCollection(repoInfo);
   this.statsListener_ = null;
   this.eventQueue_ = new fb.core.view.EventQueue;
